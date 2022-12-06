@@ -1,32 +1,31 @@
 import styled from "styled-components";
 
-export default function TelaSucesso ({setTela4, setTela1}) {
+export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, assento}) {
     return (
         <>
     <TextoInicial>
-      <h1 onClick={() => {
-        setTela4(false) 
-        setTela1(true)}}>Pedido feito
+      <h1>Pedido feito
         com sucesso!</h1>
     </TextoInicial>
 
     <CaixaInfo>
         <h1>Filme e sessão</h1>
         <p>Enola Holmes</p>
-        <p>24/06/2021 15:00</p>
+        <p>24/06/2021 {horaFilme}</p>
     </CaixaInfo>
     <CaixaInfo>
         <h1>Ingressos</h1>
-        <p>Assento 15</p>
-        <p>Assento 16</p>
+        {assento.map ((a) => <p>Assento {a}</p>)}
     </CaixaInfo>
     <CaixaInfo>
         <h1>Filme e sessão</h1>
-        <p>Nome: João da Silva Sauro</p>
-        <p>CPF: 123.456.789-10</p>
+        <p>Nome: {nome}</p>
+        <p>CPF: {cpf}</p>
     </CaixaInfo>
     
-    <Finalizar><h1>Voltar pra Home</h1></Finalizar>
+    <Finalizar onClick={() => {
+        setTela4(false) 
+        setTela1(true)}}><h1>Voltar pra Home</h1></Finalizar>
 
     </>
     )

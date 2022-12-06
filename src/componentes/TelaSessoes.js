@@ -1,24 +1,29 @@
 import styled from "styled-components";
 
-export default function TelaSessoes({ setTela2, setTela3 }) {
+export default function TelaSessoes({ setTela2, setTela3, setHoraFilme }) {
     return (
         <>
             <TextoInicial>
-                <h1 onClick={() => {
-                    setTela2(false)
-                    setTela3(true)
-                }}>Selecione o horário</h1>
+                <h1>Selecione o horário</h1>
             </TextoInicial>
             <ListaHorarios>
                 <DataEHorario>
                     <Datas>Quinta-feira - 24/06/2021</Datas>
                     <Horarios>
                         <Hora>
-                            <h1>15:00</h1>
-                            </Hora>
-                            <Hora>
-                            <h1>19:00</h1>
-                            </Hora>
+                            <h1 onClick={() => {
+                                setTela2(false)
+                                setTela3(true)
+                                setHoraFilme('15:00')
+                            }}>15:00</h1>
+                        </Hora>
+                        <Hora>
+                            <h1 onClick={() => {
+                                setTela2(false)
+                                setTela3(true)
+                                setHoraFilme('19:00')
+                            }}>19:00</h1>
+                        </Hora>
                     </Horarios>
                 </DataEHorario>
             </ListaHorarios>
@@ -56,7 +61,7 @@ font-size: 20px;
 const Horarios = styled.div`
 display: flex;
 flex-wrap: wrap;
-`; 
+`;
 const Hora = styled.div`
 width: 82px;
 height: 43px;

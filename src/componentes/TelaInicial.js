@@ -4,12 +4,12 @@ export default function TelaInicial ({setTela1, setTela2}) {
     return (
         <>
     <TextoInicial>
-      <h1 onClick={() => {
-        setTela1(false) 
-        setTela2(true)}}>Selecione o filme</h1>
+      <h1>Selecione o filme</h1>
     </TextoInicial>
     <ListaFilmes>
-    <Filmes>
+    <Filmes onClick={() => {
+        setTela1(false) 
+        setTela2(true)}}>
       <img src="" alt="" />
     </Filmes>
     </ListaFilmes>
