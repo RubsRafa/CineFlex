@@ -13,7 +13,7 @@ export default function TelaInicial({listaFilmes, abrirSessoesFilme }) {
           <Filmes onClick={() => {
             abrirSessoesFilme(f.id)
           }}>
-            <img src={f.posterURL} alt="" />
+            <img data-test="movie" src={f.posterURL} alt="" />
           </Filmes>
         )}
       </ListaFilmes>

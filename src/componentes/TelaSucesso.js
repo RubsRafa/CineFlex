@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, diaFilme, sessao, reiniciarTudo, cadeiras}) {
-    console.log(cadeiras)
+   
     return (
         <>
     <TextoInicial>

@@ -10,6 +10,11 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
             setAssento([...assento, assentoEscolhido.id])
             setCadeiras([...cadeiras, assentoEscolhido.name])
         }
+        if (assento.includes(assentoEscolhido.id)) {
+            const novosAssentos = assento.filter((a) => a !== assentoEscolhido.id)
+            setAssento(novosAssentos)
+            setCadeiras(novosAssentos.name)
+        }
     }
 
     function verificarInfo() {
@@ -26,7 +31,7 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
                 <h1>Selecione o(s) assento(s)</h1>
             </TextoInicial>
             <ListaAssentos>
-                {arrayAssentos.map((a) => <Assento disponivel={a.isAvailable} cor={selecionar} escolher={assento.includes(a.id)} onClick={() => {
+                {arrayAssentos.map((a) => <Assento data-test="seat" disponivel={a.isAvailable} cor={selecionar} escolher={assento.includes(a.id)} onClick={() => {
                     setSelecionar('#1AAE9E')
                     selecionarAssento(a)
                 }}>
@@ -48,12 +53,14 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
             </AssentoOpcoes>
             <InfoComprador>
                 <h1>Nome do comprador:</h1>
-                <input onChange={(e) => setNome(e.target.value)} value={nome} placeholder="Digite seu nome..."></input>
+                <input data-test="client-name" onChange={(e) => setNome(e.target.value)} value={nome} placeholder="Digite seu nome..."></input>
                 <h1>CPF do comprador:</h1>
-                <input onChange={(e) => setCpf(e.target.value)} value={cpf} placeholder="Digite seu CPF..."></input>
+                <input data-test="client-cpf" onChange={(e) => setCpf(e.target.value)} value={cpf} placeholder="Digite seu CPF..."></input>
             </InfoComprador>
 
-            <Reservar onClick={verificarInfo}><h1>Reservar assento(s)</h1></Reservar>
+            <Centralizar>
+            <Reservar data-test="book-seat-btn" onClick={verificarInfo}><h1>Reservar assento(s)</h1></Reservar>
+            </Centralizar>
 
         </>
     )
@@ -141,7 +148,7 @@ input{
     }
 }
 `;
-const Reservar = styled.div`
+const Reservar = styled.button`
 width: 225px;
 height: 42px;
 border: 10px;
@@ -150,9 +157,11 @@ margin: 40px auto;
 border-radius: 3px;
 text-align: center;
 h1 {
-    padding: 12px;
     font-size: 18px;
     font-family: Roboto, sans-serif;
     color: #FFFFFF;
 } 
+`; 
+const Centralizar = styled.div`
+text-align: center;
 `; 

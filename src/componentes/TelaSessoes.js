@@ -13,11 +13,11 @@ export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAs
                 <DataEHorario>
 
                     {sessoes.map((s) => 
-                        <>
+                        <div data-test="movie-day">
                         <Datas>{s.weekday} - {s.date}</Datas>
                         <Horarios>
                             <Hora>
-                                <h1 onClick={() => {
+                                <h1 data-test="showtime" onClick={() => {
                                     setHoraFilme(s.showtimes[0].name)
                                     setDiaFilme(`${s.weekday} - ${s.date}`)
                                     abrirAssentosFilme(s.showtimes[0].id)
@@ -25,7 +25,7 @@ export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAs
                             </Hora>
 
                             <Hora>
-                                <h1 onClick={() => {
+                                <h1 data-test="showtime" onClick={() => {
                                     setHoraFilme(s.showtimes[1].name)
                                     setDiaFilme(`${s.weekday} - ${s.date}`)
                                     abrirAssentosFilme(s.showtimes[1].id)
@@ -33,7 +33,7 @@ export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAs
                             </Hora>
 
                         </Horarios>
-                        </>
+                        </div>
                     )}
 
                 </DataEHorario>
@@ -75,7 +75,7 @@ const Horarios = styled.div`
 display: flex;
 flex-wrap: wrap;
 `;
-const Hora = styled.div`
+const Hora = styled.button`
 width: 82px;
 height: 43px;
 border: 10px;
@@ -83,7 +83,6 @@ background-color: #E8833A;
 margin: 8px 8px 22px 0;
 border-radius: 3px;
 h1 {
-    margin: 13px 0 0 16px;
     font-size: 18px;
     font-family: Roboto, sans-serif;
     color: #FFFFFF;
