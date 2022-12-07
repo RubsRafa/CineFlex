@@ -9,26 +9,30 @@ export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, 
         com sucesso!</h1>
     </TextoInicial>
 
-    <CaixaInfo>
+    <CaixaInfo data-test="movie-info">
         <h1>Filme e sessão</h1>
         <p>{sessao.title}</p>
         <p>{diaFilme} {horaFilme}</p>
     </CaixaInfo>
-    <CaixaInfo>
+
+    <CaixaInfo data-test="seats-info">
         <h1>Ingressos</h1>
         {cadeiras.map ((a) => <p>Assento {a}</p>)}
     </CaixaInfo>
-    <CaixaInfo>
-        <h1>Filme e sessão</h1>
+
+    <CaixaInfo data-test="client-info">
+        <h1>Comprador</h1>
         <p>Nome: {nome}</p>
         <p>CPF: {cpf}</p>
     </CaixaInfo>
     
-    <Finalizar onClick={() => {
+    <Centralizar>
+    <Finalizar data-test="go-home-btn" onClick={() => {
         setTela4(false) 
         setTela1(true)
         reiniciarTudo()
     }}><h1>Voltar pra Home</h1></Finalizar>
+    </Centralizar>
 
     </>
     )
@@ -61,7 +65,7 @@ p {
     margin-top: 8px;
 }
 `;
-const Finalizar = styled.div`
+const Finalizar = styled.button`
 width: 225px;
 height: 42px;
 border: 10px;
@@ -75,4 +79,7 @@ h1 {
     font-family: Roboto, sans-serif;
     color: #FFFFFF;
 } 
+`; 
+const Centralizar = styled.div`
+text-align: center;
 `; 

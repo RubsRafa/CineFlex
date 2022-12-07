@@ -1,9 +1,32 @@
 import { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
-export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, setCpf, assento, setAssento, arrayAssentos, reservarAssentos, setCadeiras, cadeiras }) {
+export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, setCpf, assento, setAssento, arrayAssentos, setCadeiras, cadeiras }) {
 
     const [selecionar, setSelecionar] = useState('')
+
+
+
+    function reservarAssentos(assentosEscolhidos) {
+
+        const objetoReservar = {
+            ids: assentosEscolhidos,
+            name: nome,
+            cpf: cpf
+        };
+
+
+        const promise = axios.post(`https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`, objetoReservar);
+        promise.then((res) => {
+            console.log(res)
+            setTela3(false)
+            setTela4(true)
+        });
+        promise.catch((err) => console.log('ERRO AO ENVIAR ', err))
+    }
+
+
 
     function selecionarAssento(assentoEscolhido) {
         if (!assento.includes(assentoEscolhido.id)) {

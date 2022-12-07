@@ -1,7 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
-export default function TelaInicial({listaFilmes, abrirSessoesFilme }) {
+export default function TelaInicial({abrirSessoesFilme }) {
+
+  const [listaFilmes, setListaFilmes] = useState([]);
+
+  useEffect(() => {
+    const promise = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/movies');
+    promise.then((res) => setListaFilmes(res.data));
+    promise.catch((err) => console.log('ERRO AO RECEBER LISTA DE FILME', err))
+}, [])
 
   return (
     <>

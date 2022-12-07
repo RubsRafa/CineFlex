@@ -5,6 +5,7 @@ import TelaInicial from '../componentes/TelaInicial';
 import TelaSessoes from "../componentes/TelaSessoes";
 import TelaAssentos from "../componentes/TelaAssentos";
 import TelaSucesso from "../componentes/TelaSucesso";
+import Rodape from '../componentes/Rodape'
 
 import axios from "axios";
 
@@ -25,14 +26,7 @@ export default function App() {
     const [assento, setAssento] = useState([]);
     const [cadeiras, setCadeiras] = useState([]);
 
-    const [listaFilmes, setListaFilmes] = useState([]);
     const [sessao, setSessao] = useState();
-
-    useEffect(() => {
-        const promise = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/movies');
-        promise.then((res) => setListaFilmes(res.data));
-        promise.catch((err) => console.log('ERRO AO RECEBER LISTA DE FILME', err))
-    }, [])
 
     function abrirSessoesFilme(id) {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${id}/showtimes`);
@@ -54,23 +48,6 @@ export default function App() {
         promise.catch((err) => console.log('ERRO AO RECEBER ID ESPECÍFICO', err))
     }
 
-    function reservarAssentos(assentosEscolhidos) {
-
-        const objetoReservar = {
-            ids: assentosEscolhidos,
-            name: nome,
-            cpf: cpf
-        };
-
-
-        const promise = axios.post(`https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`, objetoReservar);
-        promise.then((res) => {
-            console.log(res)
-            setTela3(false)
-            setTela4(true)
-        });
-        promise.catch((err) => console.log('ERRO AO ENVIAR ', err))
-    }
 
     function reiniciarTudo() {
         setNome('');
@@ -92,7 +69,6 @@ export default function App() {
 
             {tela1 &&
                 <TelaInicial
-                    listaFilmes={listaFilmes}
                     abrirSessoesFilme={abrirSessoesFilme}
                 />}
 
@@ -116,7 +92,6 @@ export default function App() {
                     assento={assento}
                     setAssento={setAssento}
                     arrayAssentos={arrayAssentos}
-                    reservarAssentos={reservarAssentos}
                     setCadeiras={setCadeiras}
                     cadeiras={cadeiras}
                 />}
@@ -135,16 +110,13 @@ export default function App() {
                 />}
 
 
-            {!tela1 && !tela4 &&
-                <Rodape data-test="footer">
-                    <Filme>
-                        <img src={sessao.posterURL} alt="" />
-                    </Filme>
-                    <InfoFilme>
-                        <h1>{sessao.title}</h1>
-                        {tela3 && <h1>{diaFilme} - {horaFilme}</h1>}
-                    </InfoFilme>
-                </Rodape>}
+            {!tela1 && !tela4 && 
+            <Rodape
+            sessao={sessao}
+            tela3={tela3}
+            diaFilme={diaFilme}
+            horaFilme={horaFilme}
+            />}
         </>
     );
 }
@@ -159,37 +131,5 @@ h1 {
   color: #e8833a;
   font-size: 34px;
   padding: 15px;
-}
-`;
-const Rodape = styled.div`
-width: 100%;
-height: 117px;
-background-color: #DFE6ED;
-border: 1px solid #9EADBA;
-display: flex;
-flex-wrap: wrap;
-position: fixed;
-bottom: 0;
-left:0;
-`;
-const Filme = styled.div`
-width: 64px;
-height: 89px;
-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-border-radius: 2px;
-margin: 13px 10px 0 10px; 
-background-color: #FFFFFF;
-img {
-    margin: 8px 0 0 8px;
-    width: 48px;
-    height: 72px;
-}
-`;
-const InfoFilme = styled.div`
-margin: 40px 0 0 2px;
-h1 {
-    font-family: Roboto, sans-serif;
-    font-size: 26px;
-    color: #293845;
 }
 `;
