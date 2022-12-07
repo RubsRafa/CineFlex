@@ -1,30 +1,32 @@
 import styled from "styled-components";
 
-export default function TelaSessoes({ setTela2, setTela3, setHoraFilme }) {
+export default function TelaSessoes({ setHoraFilme, sessao, setTela2, setTela3 }) {
+    const sessoes = sessao.days;
+    console.log(sessoes)
     return (
         <>
             <TextoInicial>
                 <h1>Selecione o horário</h1>
             </TextoInicial>
             <ListaHorarios>
+
                 <DataEHorario>
-                    <Datas>Quinta-feira - 24/06/2021</Datas>
-                    <Horarios>
-                        <Hora>
-                            <h1 onClick={() => {
-                                setTela2(false)
-                                setTela3(true)
-                                setHoraFilme('15:00')
-                            }}>15:00</h1>
-                        </Hora>
-                        <Hora>
-                            <h1 onClick={() => {
-                                setTela2(false)
-                                setTela3(true)
-                                setHoraFilme('19:00')
-                            }}>19:00</h1>
-                        </Hora>
-                    </Horarios>
+
+                    {sessoes.map((s) => {
+                        <>
+                        <Datas>{s.weekday} - {s.date}</Datas>
+                        <Horarios>
+                            <Hora>
+                                <h1 onClick={() => {
+                                    setTela2(false)
+                                    setTela3(true)
+                                    setHoraFilme('15:00')
+                            }}>{s.id}</h1>
+                            </Hora>
+                        </Horarios>
+                        </>
+                    })}
+
                 </DataEHorario>
             </ListaHorarios>
         </>

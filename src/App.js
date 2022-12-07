@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GlobalStyle from './css/globalStyle';
 import styled from "styled-components";
 
@@ -6,6 +6,8 @@ import TelaInicial from "./componentes/TelaInicial";
 import TelaSessoes from "./componentes/TelaSessoes";
 import TelaAssentos from "./componentes/TelaAssentos";
 import TelaSucesso from "./componentes/TelaSucesso";
+
+import axios from "axios";
 
 
 export default function App() {
@@ -21,6 +23,32 @@ export default function App() {
   const [horaFilme, setHoraFilme] = useState('');
   const [assento, setAssento] = useState([]);
 
+
+  const [listaFilmes, setListaFilmes] = useState([]);
+  const [id, setId] = useState(); 
+  const [sessao, setSessao] = useState(); 
+
+  console.log (id)
+  console.log (sessao)
+
+  useEffect(() => {
+    const promise = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/movies');
+    promise.then((res) => setListaFilmes(res.data));
+    promise.catch((err) => console.log('ERRO AO RECEBER LISTA DE FILME', err))
+  }, [])
+
+  function abrirSessoesFilme (id) {
+      const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${id}/showtimes`);
+      promise.then ((res) => {
+        console.log(res.data)
+        setSessao(res.data)
+        setTela1(false)
+        setTela2(true)
+      });
+      promise.catch((err) => console.log('ERRO AO RECEBER ID ESPECÍFICO', err))
+  }
+
+
   return (
     <>
     <GlobalStyle />
@@ -29,18 +57,50 @@ export default function App() {
       <h1>CINEFLIX</h1>
     </ContainerLogo>
 
-    {tela1 && <TelaInicial setTela1={setTela1} setTela2={setTela2} />}
-    {tela2 && <TelaSessoes setTela2={setTela2} setTela3={setTela3} setHoraFilme={setHoraFilme} />}
-    {tela3 && <TelaAssentos setTela3={setTela3} setTela4={setTela4} nome={nome} setNome={setNome} cpf={cpf} setCpf={setCpf} assento={assento} setAssento={setAssento}  />}
-    {tela4 && <TelaSucesso setTela4={setTela4} setTela1={setTela1} nome={nome} cpf={cpf} horaFilme={horaFilme} assento={assento} />}
+    {tela1 && 
+    <TelaInicial 
+    setTela1={setTela1} 
+    setTela2={setTela2} 
+    listaFilmes={listaFilmes}
+    setId={setId}
+    abrirSessoesFilme={abrirSessoesFilme}
+    />}
+
+    {tela2 && 
+    <TelaSessoes  
+    setTela2={setTela2} 
+    setTela3={setTela3} 
+    setHoraFilme={setHoraFilme}
+    sessao={sessao} 
+    />}
+
+    {/* {tela3 && 
+    <TelaAssentos 
+    setTela3={setTela3} 
+    setTela4={setTela4} 
+    nome={nome} 
+    setNome={setNome} 
+    cpf={cpf} 
+    setCpf={setCpf} 
+    assento={assento} 
+    setAssento={setAssento}  />}
+
+    {tela4 && 
+    <TelaSucesso 
+    setTela4={setTela4} 
+    setTela1={setTela1} 
+    nome={nome} 
+    cpf={cpf} 
+    horaFilme={horaFilme} 
+    assento={assento} />} */}
 
 
     {!tela1 && !tela4 && <Rodape>
                 <Filme>
-                    <img src="https://upload.wikimedia.org/wikipedia/pt/e/e6/Enola_Holmes_poster.jpeg" alt="" />
+                    <img src={sessao.posterURL} alt="" />
                 </Filme>
                 <InfoFilme>
-                <h1>Enola Holmes</h1>
+                <h1>{sessao.title}</h1>
                 {tela3 && <h1>Quinta-feira - {horaFilme}</h1>}
                 </InfoFilme>
             </Rodape>}
