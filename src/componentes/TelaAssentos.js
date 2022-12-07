@@ -1,10 +1,24 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, setCpf, assento, setAssento }) {
+export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, setCpf, assento, setAssento, arrayAssentos, reservarAssentos, setCadeiras, cadeiras }) {
 
-    const [selecionar, setSelecionar] = useState('#C3CFD9')
-    const assentos = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21']
+    const [selecionar, setSelecionar] = useState('')
+
+    function selecionarAssento(assentoEscolhido) {
+        if (!assento.includes(assentoEscolhido.id)) {
+            setAssento([...assento, assentoEscolhido.id])
+            setCadeiras([...cadeiras, assentoEscolhido.name])
+        }
+    }
+
+    function verificarInfo() {
+        if (nome.length !== 0 && cpf.length !== 0 && arrayAssentos.length !== 0) {
+            setTela3(false)
+            setTela4(true)
+            reservarAssentos(assento)
+        }
+    }
 
     return (
         <>
@@ -12,11 +26,11 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
                 <h1>Selecione o(s) assento(s)</h1>
             </TextoInicial>
             <ListaAssentos>
-                {assentos.map((a) => <Assento cor={selecionar} escolher={assento.includes(a)} onClick={() => {
-                setSelecionar('#1AAE9E') 
-                setAssento([...assento, a])
-            console.log (a)}
-            }><h1>{a}</h1></Assento>)}
+                {arrayAssentos.map((a) => <Assento disponivel={a.isAvailable} cor={selecionar} escolher={assento.includes(a.id)} onClick={() => {
+                    setSelecionar('#1AAE9E')
+                    selecionarAssento(a)
+                }}>
+                    <h1>{a.name}</h1></Assento>)}
             </ListaAssentos>
             <AssentoOpcoes>
                 <Opcao>
@@ -39,10 +53,7 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
                 <input onChange={(e) => setCpf(e.target.value)} value={cpf} placeholder="Digite seu CPF..."></input>
             </InfoComprador>
 
-            <Reservar onClick={() => {
-                setTela3(false)
-                setTela4(true)
-            }}><h1>Reservar assento(s)</h1></Reservar>
+            <Reservar onClick={verificarInfo}><h1>Reservar assento(s)</h1></Reservar>
 
         </>
     )
@@ -66,18 +77,17 @@ display: flex;
 flex-wrap: wrap;
 justify-content: space-around;
 `;
-const Assento = styled.div`
+const Assento = styled.button`
 margin: 0 10px 15px 0; 
 width: 26px;
 height: 26px;
-background-color: #C3CFD9;
-background-color: ${props => props.escolher && props.cor};
+background-color: ${props => props.disponivel ? '#C3CFD9' : '#FBE192'};
+background-color: ${props => props.escolher && props.disponivel && props.cor};
 box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
 border-radius: 50%;
-border: 1px solid #808F9D; 
+border: 1px solid ${props => props.disponivel ? '#808F9D' : '#FBE192'}; 
 text-align: center;
 h1 {
-    padding: 8px;
     color: #000000; 
     font-size: 11px;
     font-family: Roboto, sans-serif;

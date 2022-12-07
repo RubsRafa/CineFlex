@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import GlobalStyle from './css/globalStyle';
 import styled from "styled-components";
 
 import TelaInicial from "./componentes/TelaInicial";
@@ -21,15 +20,13 @@ export default function App() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [horaFilme, setHoraFilme] = useState('');
+  const [diaFilme, setDiaFilme] = useState('');
+  const [arrayAssentos, setArrayAssentos] = useState([]);
   const [assento, setAssento] = useState([]);
-
+  const [cadeiras, setCadeiras] = useState([]);
 
   const [listaFilmes, setListaFilmes] = useState([]);
-  const [id, setId] = useState(); 
-  const [sessao, setSessao] = useState(); 
-
-  console.log (id)
-  console.log (sessao)
+  const [sessao, setSessao] = useState();
 
   useEffect(() => {
     const promise = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/movies');
@@ -37,73 +34,117 @@ export default function App() {
     promise.catch((err) => console.log('ERRO AO RECEBER LISTA DE FILME', err))
   }, [])
 
-  function abrirSessoesFilme (id) {
-      const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${id}/showtimes`);
-      promise.then ((res) => {
-        console.log(res.data)
-        setSessao(res.data)
-        setTela1(false)
-        setTela2(true)
-      });
-      promise.catch((err) => console.log('ERRO AO RECEBER ID ESPECÍFICO', err))
+  function abrirSessoesFilme(id) {
+    const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${id}/showtimes`);
+    promise.then((res) => {
+      setSessao(res.data)
+      setTela1(false)
+      setTela2(true)
+    });
+    promise.catch((err) => console.log('ERRO AO RECEBER ID ESPECÍFICO', err))
+  }
+
+  function abrirAssentosFilme(id) {
+    const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${id}/seats`);
+    promise.then((res) => {
+      setArrayAssentos(res.data.seats)
+      setTela2(false)
+      setTela3(true)
+    });
+    promise.catch((err) => console.log('ERRO AO RECEBER ID ESPECÍFICO', err))
+  }
+
+  function reservarAssentos(assentosEscolhidos) {
+
+    const objetoReservar = {
+      ids: assentosEscolhidos,
+      name: nome,
+      cpf: cpf
+    };
+
+    console.log(objetoReservar)
+
+    const promise = axios.post(`https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`, objetoReservar);
+    promise.then((res) => {
+      console.log(res)
+      setTela3(false)
+      setTela4(true)
+    });
+    promise.catch((err) => console.log('ERRO AO ENVIAR ', err))
+  }
+
+  function reiniciarTudo () {
+    setNome('');
+    setCpf('');
+    setHoraFilme('');
+    setDiaFilme('');
+    setArrayAssentos([]);
+    setAssento([]);
+    setSessao();
   }
 
 
   return (
     <>
-    <GlobalStyle />
+      <ContainerLogo>
+        <h1>CINEFLIX</h1>
+      </ContainerLogo>
 
-    <ContainerLogo>
-      <h1>CINEFLIX</h1>
-    </ContainerLogo>
+      {tela1 &&
+        <TelaInicial
+          listaFilmes={listaFilmes}
+          abrirSessoesFilme={abrirSessoesFilme}
+        />}
 
-    {tela1 && 
-    <TelaInicial 
-    setTela1={setTela1} 
-    setTela2={setTela2} 
-    listaFilmes={listaFilmes}
-    setId={setId}
-    abrirSessoesFilme={abrirSessoesFilme}
-    />}
+      {tela2 &&
+        <TelaSessoes
+          setTela2={setTela2}
+          setTela3={setTela3}
+          setHoraFilme={setHoraFilme}
+          sessao={sessao}
+          setDiaFilme={setDiaFilme}
+          abrirAssentosFilme={abrirAssentosFilme}
+        />}
+      {tela3 &&
+        <TelaAssentos
+          setTela3={setTela3}
+          setTela4={setTela4}
+          nome={nome}
+          setNome={setNome}
+          cpf={cpf}
+          setCpf={setCpf}
+          assento={assento}
+          setAssento={setAssento}
+          arrayAssentos={arrayAssentos}
+          reservarAssentos={reservarAssentos}
+          setCadeiras={setCadeiras}
+          cadeiras={cadeiras}
+        />}
 
-    {tela2 && 
-    <TelaSessoes  
-    setTela2={setTela2} 
-    setTela3={setTela3} 
-    setHoraFilme={setHoraFilme}
-    sessao={sessao} 
-    />}
-
-    {/* {tela3 && 
-    <TelaAssentos 
-    setTela3={setTela3} 
-    setTela4={setTela4} 
-    nome={nome} 
-    setNome={setNome} 
-    cpf={cpf} 
-    setCpf={setCpf} 
-    assento={assento} 
-    setAssento={setAssento}  />}
-
-    {tela4 && 
-    <TelaSucesso 
-    setTela4={setTela4} 
-    setTela1={setTela1} 
-    nome={nome} 
-    cpf={cpf} 
-    horaFilme={horaFilme} 
-    assento={assento} />} */}
+      {tela4 &&
+        <TelaSucesso
+          setTela4={setTela4}
+          setTela1={setTela1}
+          nome={nome}
+          cpf={cpf}
+          sessao={sessao}
+          diaFilme={diaFilme}
+          horaFilme={horaFilme}
+          reiniciarTudo={reiniciarTudo}
+          cadeiras={cadeiras}
+        />}
 
 
-    {!tela1 && !tela4 && <Rodape>
-                <Filme>
-                    <img src={sessao.posterURL} alt="" />
-                </Filme>
-                <InfoFilme>
-                <h1>{sessao.title}</h1>
-                {tela3 && <h1>Quinta-feira - {horaFilme}</h1>}
-                </InfoFilme>
-            </Rodape>}
+      {!tela1 && !tela4 &&
+        <Rodape>
+          <Filme>
+            <img src={sessao.posterURL} alt="" />
+          </Filme>
+          <InfoFilme>
+            <h1>{sessao.title}</h1>
+            {tela3 && <h1>{diaFilme} - {horaFilme}</h1>}
+          </InfoFilme>
+        </Rodape>}
     </>
   );
 }

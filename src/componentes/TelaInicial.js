@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-export default function TelaInicial({listaFilmes, setId, abrirSessoesFilme }) {
+export default function TelaInicial({listaFilmes, abrirSessoesFilme }) {
 
   return (
     <>
@@ -11,7 +11,6 @@ export default function TelaInicial({listaFilmes, setId, abrirSessoesFilme }) {
       <ListaFilmes>
         {listaFilmes.map((f) =>
           <Filmes onClick={() => {
-            setId(f.id)
             abrirSessoesFilme(f.id)
           }}>
             <img src={f.posterURL} alt="" />

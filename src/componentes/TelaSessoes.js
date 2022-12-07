@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-export default function TelaSessoes({ setHoraFilme, sessao, setTela2, setTela3 }) {
-    const sessoes = sessao.days;
-    console.log(sessoes)
+export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAssentosFilme }) {
+    let sessoes = sessao.days;
+
     return (
         <>
             <TextoInicial>
@@ -12,20 +12,29 @@ export default function TelaSessoes({ setHoraFilme, sessao, setTela2, setTela3 }
 
                 <DataEHorario>
 
-                    {sessoes.map((s) => {
+                    {sessoes.map((s) => 
                         <>
                         <Datas>{s.weekday} - {s.date}</Datas>
                         <Horarios>
                             <Hora>
                                 <h1 onClick={() => {
-                                    setTela2(false)
-                                    setTela3(true)
-                                    setHoraFilme('15:00')
-                            }}>{s.id}</h1>
+                                    setHoraFilme(s.showtimes[0].name)
+                                    setDiaFilme(`${s.weekday} - ${s.date}`)
+                                    abrirAssentosFilme(s.showtimes[0].id)
+                            }}>{s.showtimes[0].name}</h1>
                             </Hora>
+
+                            <Hora>
+                                <h1 onClick={() => {
+                                    setHoraFilme(s.showtimes[1].name)
+                                    setDiaFilme(`${s.weekday} - ${s.date}`)
+                                    abrirAssentosFilme(s.showtimes[1].id)
+                            }}>{s.showtimes[1].name}</h1>
+                            </Hora>
+
                         </Horarios>
                         </>
-                    })}
+                    )}
 
                 </DataEHorario>
             </ListaHorarios>
@@ -53,12 +62,14 @@ justify-content: space-around;
 `;
 const DataEHorario = styled.div`
 width: 100%;
-height: 100px;
+height: 100%;
+margin-bottom: 120px;
 `;
 const Datas = styled.h1`
 font-size: 20px;
     color: #293845;
     font-family: Roboto, sans-serif;
+    margin:0 0 18px 0;
 `;
 const Horarios = styled.div`
 display: flex;
@@ -69,10 +80,10 @@ width: 82px;
 height: 43px;
 border: 10px;
 background-color: #E8833A;
-margin: 8px 5px 0 0;
+margin: 8px 8px 22px 0;
 border-radius: 3px;
 h1 {
-    padding: 13px;
+    margin: 13px 0 0 16px;
     font-size: 18px;
     font-family: Roboto, sans-serif;
     color: #FFFFFF;

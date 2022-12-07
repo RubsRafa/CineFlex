@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
-export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, assento}) {
+export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, diaFilme, sessao, reiniciarTudo, cadeiras}) {
+    console.log(cadeiras)
     return (
         <>
     <TextoInicial>
@@ -10,12 +11,12 @@ export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, 
 
     <CaixaInfo>
         <h1>Filme e sessão</h1>
-        <p>Enola Holmes</p>
-        <p>24/06/2021 {horaFilme}</p>
+        <p>{sessao.title}</p>
+        <p>{diaFilme} {horaFilme}</p>
     </CaixaInfo>
     <CaixaInfo>
         <h1>Ingressos</h1>
-        {assento.map ((a) => <p>Assento {a}</p>)}
+        {cadeiras.map ((a) => <p>Assento {a}</p>)}
     </CaixaInfo>
     <CaixaInfo>
         <h1>Filme e sessão</h1>
@@ -25,7 +26,9 @@ export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, 
     
     <Finalizar onClick={() => {
         setTela4(false) 
-        setTela1(true)}}><h1>Voltar pra Home</h1></Finalizar>
+        setTela1(true)
+        reiniciarTudo()
+    }}><h1>Voltar pra Home</h1></Finalizar>
 
     </>
     )
