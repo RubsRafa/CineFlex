@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function TelaInicial({ abrirSessoesFilme }) {
 
@@ -19,13 +20,13 @@ export default function TelaInicial({ abrirSessoesFilme }) {
       </TextoInicial>
       <ListaFilmes>
         {listaFilmes.map((f) =>
-          // <Link key={f.id} to={`/sessoes/${f.id}`} >
+          <Link key={f.id} to={`/sessoes/${f.id}`}>
             <Filmes onClick={() => {
               abrirSessoesFilme(f.id)
             }}>
               <img data-test="movie" src={f.posterURL} alt="" />
             </Filmes>
-          // </Link>
+          </Link>
         )}
       </ListaFilmes>
     </>

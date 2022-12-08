@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAssentosFilme }) {
@@ -12,28 +13,30 @@ export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAs
 
                 <DataEHorario>
 
-                    {sessoes.map((s) => 
-                        <div data-test="movie-day">
-                        <Datas>{s.weekday} - {s.date}</Datas>
-                        <Horarios>
-                            <Hora>
-                                <h1 data-test="showtime" onClick={() => {
-                                    setHoraFilme(s.showtimes[0].name)
-                                    setDiaFilme(`${s.weekday} - ${s.date}`)
-                                    abrirAssentosFilme(s.showtimes[0].id)
-                            }}>{s.showtimes[0].name}</h1>
-                            </Hora>
+                    {sessoes.map((s) =>
+                            <div data-test="movie-day">
+                                <Link key={s.id} to={`/assentos/${s.id}`}>
+                                <Datas>{s.weekday} - {s.date}</Datas>
+                                <Horarios>
+                                    <Hora>
+                                        <h1 data-test="showtime" onClick={() => {
+                                            setHoraFilme(s.showtimes[0].name)
+                                            setDiaFilme(`${s.weekday} - ${s.date}`)
+                                            abrirAssentosFilme(s.showtimes[0].id)
+                                        }}>{s.showtimes[0].name}</h1>
+                                    </Hora>
 
-                            <Hora>
-                                <h1 data-test="showtime" onClick={() => {
-                                    setHoraFilme(s.showtimes[1].name)
-                                    setDiaFilme(`${s.weekday} - ${s.date}`)
-                                    abrirAssentosFilme(s.showtimes[1].id)
-                            }}>{s.showtimes[1].name}</h1>
-                            </Hora>
+                                    <Hora>
+                                        <h1 data-test="showtime" onClick={() => {
+                                            setHoraFilme(s.showtimes[1].name)
+                                            setDiaFilme(`${s.weekday} - ${s.date}`)
+                                            abrirAssentosFilme(s.showtimes[1].id)
+                                        }}>{s.showtimes[1].name}</h1>
+                                    </Hora>
 
-                        </Horarios>
-                        </div>
+                                </Horarios>
+                                </Link>
+                            </div>
                     )}
 
                 </DataEHorario>

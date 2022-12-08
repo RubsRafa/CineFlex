@@ -28,7 +28,6 @@ export default function App() {
     const [cadeiras, setCadeiras] = useState([]);
 
     const [sessao, setSessao] = useState();
-    console.log(sessao)
 
     function abrirSessoesFilme(id) {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${id}/showtimes`);
@@ -71,39 +70,37 @@ export default function App() {
 
             <Routes>
 
-                {tela1 &&
-                    <Route path='/' element={<TelaInicial
+                <Route path="/" element={(
+                    tela1 && <TelaInicial
                         abrirSessoesFilme={abrirSessoesFilme}
-                    />} />}
+                    />)} />
 
-                {tela2 &&
-                    <Route path='/sessoes/:idFilme' element={
-                        <TelaSessoes
-                            setTela2={setTela2}
-                            setTela3={setTela3}
-                            setHoraFilme={setHoraFilme}
-                            sessao={sessao}
-                            setDiaFilme={setDiaFilme}
-                            abrirAssentosFilme={abrirAssentosFilme}
-                        />
-                    } />}
+                <Route path="/sessoes/:idFilme" element={(
+                    tela2 && <TelaSessoes
+                    setTela2={setTela2}
+                    setTela3={setTela3}
+                    setHoraFilme={setHoraFilme}
+                    sessao={sessao}
+                    setDiaFilme={setDiaFilme}
+                    abrirAssentosFilme={abrirAssentosFilme}
+                />
+                )} />
 
-                {tela3 &&
-                    <Route path='/assentos/:idSessao' element={
-                        <TelaAssentos
-                            setTela3={setTela3}
-                            setTela4={setTela4}
-                            nome={nome}
-                            setNome={setNome}
-                            cpf={cpf}
-                            setCpf={setCpf}
-                            assento={assento}
-                            setAssento={setAssento}
-                            arrayAssentos={arrayAssentos}
-                            setCadeiras={setCadeiras}
-                            cadeiras={cadeiras}
-                        />
-                    } />}
+                <Route path="/assentos/:idSessao" element={(
+                    tela3 && <TelaAssentos
+                    setTela3={setTela3}
+                    setTela4={setTela4}
+                    nome={nome}
+                    setNome={setNome}
+                    cpf={cpf}
+                    setCpf={setCpf}
+                    assento={assento}
+                    setAssento={setAssento}
+                    arrayAssentos={arrayAssentos}
+                    setCadeiras={setCadeiras}
+                    cadeiras={cadeiras}
+                />
+                )} />
 
             </Routes>
 

@@ -51,4 +51,5 @@ table {
 }
 `;
 
+
 export default GlobalStyle; 
