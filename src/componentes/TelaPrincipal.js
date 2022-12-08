@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 import TelaInicial from '../componentes/TelaInicial';
@@ -8,6 +8,7 @@ import TelaSucesso from "../componentes/TelaSucesso";
 import Rodape from '../componentes/Rodape'
 
 import axios from "axios";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
     const [cadeiras, setCadeiras] = useState([]);
 
     const [sessao, setSessao] = useState();
+    console.log(sessao)
 
     function abrirSessoesFilme(id) {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${id}/showtimes`);
@@ -62,39 +64,49 @@ export default function App() {
 
 
     return (
-        <>
+        <BrowserRouter>
             <ContainerLogo>
                 <h1>CINEFLIX</h1>
             </ContainerLogo>
 
-            {tela1 &&
-                <TelaInicial
-                    abrirSessoesFilme={abrirSessoesFilme}
-                />}
+            <Routes>
 
-            {tela2 &&
-                <TelaSessoes
-                    setTela2={setTela2}
-                    setTela3={setTela3}
-                    setHoraFilme={setHoraFilme}
-                    sessao={sessao}
-                    setDiaFilme={setDiaFilme}
-                    abrirAssentosFilme={abrirAssentosFilme}
-                />}
-            {tela3 &&
-                <TelaAssentos
-                    setTela3={setTela3}
-                    setTela4={setTela4}
-                    nome={nome}
-                    setNome={setNome}
-                    cpf={cpf}
-                    setCpf={setCpf}
-                    assento={assento}
-                    setAssento={setAssento}
-                    arrayAssentos={arrayAssentos}
-                    setCadeiras={setCadeiras}
-                    cadeiras={cadeiras}
-                />}
+                {tela1 &&
+                    <Route path='/' element={<TelaInicial
+                        abrirSessoesFilme={abrirSessoesFilme}
+                    />} />}
+
+                {tela2 &&
+                    <Route path='/sessoes/:idFilme' element={
+                        <TelaSessoes
+                            setTela2={setTela2}
+                            setTela3={setTela3}
+                            setHoraFilme={setHoraFilme}
+                            sessao={sessao}
+                            setDiaFilme={setDiaFilme}
+                            abrirAssentosFilme={abrirAssentosFilme}
+                        />
+                    } />}
+
+                {tela3 &&
+                    <Route path='/assentos/:idSessao' element={
+                        <TelaAssentos
+                            setTela3={setTela3}
+                            setTela4={setTela4}
+                            nome={nome}
+                            setNome={setNome}
+                            cpf={cpf}
+                            setCpf={setCpf}
+                            assento={assento}
+                            setAssento={setAssento}
+                            arrayAssentos={arrayAssentos}
+                            setCadeiras={setCadeiras}
+                            cadeiras={cadeiras}
+                        />
+                    } />}
+
+            </Routes>
+
 
             {tela4 &&
                 <TelaSucesso
@@ -110,14 +122,14 @@ export default function App() {
                 />}
 
 
-            {!tela1 && !tela4 && 
-            <Rodape
-            sessao={sessao}
-            tela3={tela3}
-            diaFilme={diaFilme}
-            horaFilme={horaFilme}
-            />}
-        </>
+            {!tela1 && !tela4 &&
+                <Rodape
+                    sessao={sessao}
+                    tela3={tela3}
+                    diaFilme={diaFilme}
+                    horaFilme={horaFilme}
+                />}
+        </BrowserRouter>
     );
 }
 const ContainerLogo = styled.div`

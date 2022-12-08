@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-export default function TelaInicial({abrirSessoesFilme }) {
+export default function TelaInicial({ abrirSessoesFilme }) {
 
   const [listaFilmes, setListaFilmes] = useState([]);
 
@@ -10,7 +10,7 @@ export default function TelaInicial({abrirSessoesFilme }) {
     const promise = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/movies');
     promise.then((res) => setListaFilmes(res.data));
     promise.catch((err) => console.log('ERRO AO RECEBER LISTA DE FILME', err))
-}, [])
+  }, [])
 
   return (
     <>
@@ -19,11 +19,13 @@ export default function TelaInicial({abrirSessoesFilme }) {
       </TextoInicial>
       <ListaFilmes>
         {listaFilmes.map((f) =>
-          <Filmes onClick={() => {
-            abrirSessoesFilme(f.id)
-          }}>
-            <img data-test="movie" src={f.posterURL} alt="" />
-          </Filmes>
+          // <Link key={f.id} to={`/sessoes/${f.id}`} >
+            <Filmes onClick={() => {
+              abrirSessoesFilme(f.id)
+            }}>
+              <img data-test="movie" src={f.posterURL} alt="" />
+            </Filmes>
+          // </Link>
         )}
       </ListaFilmes>
     </>
