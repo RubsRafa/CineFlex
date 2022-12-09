@@ -1,40 +1,41 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export default function TelaSucesso ({setTela4, setTela1, nome, cpf, horaFilme, diaFilme, sessao, reiniciarTudo, cadeiras}) {
-   
+export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, reiniciarTudo, nomeFilme }) {
+
     return (
         <>
-    <TextoInicial>
-      <h1>Pedido feito
-        com sucesso!</h1>
-    </TextoInicial>
+            <TextoInicial>
+                <h1>Pedido feito
+                    com sucesso!</h1>
+            </TextoInicial>
 
-    <CaixaInfo data-test="movie-info">
-        <h1>Filme e sessão</h1>
-        <p>{sessao.title}</p>
-        <p>{diaFilme} {horaFilme}</p>
-    </CaixaInfo>
+            <CaixaInfo data-test="movie-info">
+                <h1>Filme e sessão</h1>
+                <p>{nomeFilme}</p>
+                <p>{diaFilme} - {horaFilme}</p>
+            </CaixaInfo>
 
-    <CaixaInfo data-test="seats-info">
-        <h1>Ingressos</h1>
-        {cadeiras.map ((a) => <p>Assento {a}</p>)}
-    </CaixaInfo>
+            <CaixaInfo data-test="seats-info">
+                <h1>Ingressos</h1>
+                {cadeiras.map((a) => <p>Assento {a}</p>)}
+            </CaixaInfo>
 
-    <CaixaInfo data-test="client-info">
-        <h1>Comprador</h1>
-        <p>Nome: {nome}</p>
-        <p>CPF: {cpf}</p>
-    </CaixaInfo>
-    
-    <Centralizar>
-    <Finalizar data-test="go-home-btn" onClick={() => {
-        setTela4(false) 
-        setTela1(true)
-        reiniciarTudo()
-    }}><h1>Voltar pra Home</h1></Finalizar>
-    </Centralizar>
+            <CaixaInfo data-test="client-info">
+                <h1>Comprador</h1>
+                <p>Nome: {nome}</p>
+                <p>CPF: {cpf}</p>
+            </CaixaInfo>
 
-    </>
+            <Centralizar>
+                <Link to={'/'}>
+                    <Finalizar data-test="go-home-btn" onClick={() => {
+                        reiniciarTudo()
+                    }}><h1>Voltar pra Home</h1></Finalizar>
+                </Link>
+            </Centralizar>
+
+        </>
     )
 }
 const TextoInicial = styled.div`
@@ -79,7 +80,7 @@ h1 {
     font-family: Roboto, sans-serif;
     color: #FFFFFF;
 } 
-`; 
+`;
 const Centralizar = styled.div`
 text-align: center;
 `; 

@@ -1,8 +1,28 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 
-export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAssentosFilme }) {
-    let sessoes = sessao.days;
+export default function TelaSessoes({ setHoraFilme, setDiaFilme, setSemanaFilme, setAparecerHorario }) {
+    const [sessoes, setSessoes] = useState(undefined);
+    const { idFilme } = useParams();
+
+
+    useEffect(() => {
+        axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`)
+            .then((res) => setSessoes(res.data))
+            .catch((err) => console.log(err.response.data))
+    }, [])
+
+
+    if (sessoes === undefined) {
+        return (
+            <TextoInicial>
+                <h1>Carregando sessões....</h1>
+            </TextoInicial>
+        )
+    }
+
 
     return (
         <>
@@ -13,30 +33,34 @@ export default function TelaSessoes({ setHoraFilme, sessao, setDiaFilme, abrirAs
 
                 <DataEHorario>
 
-                    {sessoes.map((s) =>
-                            <div data-test="movie-day">
-                                <Link key={s.id} to={`/assentos/${s.id}`}>
-                                <Datas>{s.weekday} - {s.date}</Datas>
-                                <Horarios>
-                                    <Hora>
-                                        <h1 data-test="showtime" onClick={() => {
-                                            setHoraFilme(s.showtimes[0].name)
-                                            setDiaFilme(`${s.weekday} - ${s.date}`)
-                                            abrirAssentosFilme(s.showtimes[0].id)
-                                        }}>{s.showtimes[0].name}</h1>
+                    {sessoes.days.map((s) =>
+                        <div key={s.id} data-test="movie-day">
+                            <Datas>{s.weekday} - {s.date}</Datas>
+                            <Horarios>
+                                <Link to={`/assentos/${s.showtimes[0].id}`} >
+                                    <Hora onClick={() => {
+                                        setHoraFilme(s.showtimes[0].name)
+                                        setDiaFilme(s.date)
+                                        setSemanaFilme(s.weekday)
+                                        setAparecerHorario(true)
+                                    }} >
+                                        <h1 data-test="showtime">{s.showtimes[0].name}</h1>
                                     </Hora>
-
-                                    <Hora>
-                                        <h1 data-test="showtime" onClick={() => {
-                                            setHoraFilme(s.showtimes[1].name)
-                                            setDiaFilme(`${s.weekday} - ${s.date}`)
-                                            abrirAssentosFilme(s.showtimes[1].id)
-                                        }}>{s.showtimes[1].name}</h1>
-                                    </Hora>
-
-                                </Horarios>
                                 </Link>
-                            </div>
+
+                                <Link to={`/assentos/${s.showtimes[1].id}`}>
+                                    <Hora onClick={() => {
+                                        setHoraFilme(s.showtimes[1].name)
+                                        setDiaFilme(s.date)
+                                        setSemanaFilme(s.weekday)
+                                        setAparecerHorario(true)
+                                    }} >
+                                        <h1 data-test="showtime">{s.showtimes[1].name}</h1>
+                                    </Hora>
+                                </Link>
+
+                            </Horarios>
+                        </div>
                     )}
 
                 </DataEHorario>

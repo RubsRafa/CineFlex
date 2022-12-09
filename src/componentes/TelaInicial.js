@@ -3,15 +3,23 @@ import styled from "styled-components";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-export default function TelaInicial({ abrirSessoesFilme }) {
+export default function TelaInicial({setNomeFilme, setImagemFilme, setInfoFilme}) {
 
-  const [listaFilmes, setListaFilmes] = useState([]);
+  const [listaFilmes, setListaFilmes] = useState(undefined);
 
   useEffect(() => {
     const promise = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/movies');
     promise.then((res) => setListaFilmes(res.data));
     promise.catch((err) => console.log('ERRO AO RECEBER LISTA DE FILME', err))
   }, [])
+
+  if (listaFilmes === undefined) {
+    return (
+      <TextoInicial>
+        <h1>Carregando...</h1>
+      </TextoInicial>
+    )
+  }
 
   return (
     <>
@@ -22,8 +30,10 @@ export default function TelaInicial({ abrirSessoesFilme }) {
         {listaFilmes.map((f) =>
           <Link key={f.id} to={`/sessoes/${f.id}`}>
             <Filmes onClick={() => {
-              abrirSessoesFilme(f.id)
-            }}>
+              setNomeFilme(f.title)
+              setImagemFilme(f.posterURL)
+              setInfoFilme(true)
+              }}>
               <img data-test="movie" src={f.posterURL} alt="" />
             </Filmes>
           </Link>

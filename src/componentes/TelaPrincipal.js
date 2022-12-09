@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import TelaInicial from '../componentes/TelaInicial';
@@ -8,125 +8,98 @@ import TelaSucesso from "../componentes/TelaSucesso";
 import Rodape from '../componentes/Rodape'
 
 import axios from "axios";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 
-export default function App() {
-
-    const [tela1, setTela1] = useState(true)
-    const [tela2, setTela2] = useState(false)
-    const [tela3, setTela3] = useState(false)
-    const [tela4, setTela4] = useState(false)
-
+export default function TelaPrincipal() {
 
     const [nome, setNome] = useState('');
     const [cpf, setCpf] = useState('');
     const [horaFilme, setHoraFilme] = useState('');
+    const [semanaFilme, setSemanaFilme] = useState('');
     const [diaFilme, setDiaFilme] = useState('');
-    const [arrayAssentos, setArrayAssentos] = useState([]);
-    const [assento, setAssento] = useState([]);
+    const [nomeFilme, setNomeFilme] = useState('');
+    const [imagemFilme, setImagemFilme] = useState('');
     const [cadeiras, setCadeiras] = useState([]);
+    const [infoFilme, setInfoFilme] = useState(false);
+    const [aparecerHorario, setAparecerHorario] = useState(false);
 
-    const [sessao, setSessao] = useState();
-
-    function abrirSessoesFilme(id) {
-        const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${id}/showtimes`);
-        promise.then((res) => {
-            setSessao(res.data)
-            setTela1(false)
-            setTela2(true)
-        });
-        promise.catch((err) => console.log('ERRO AO RECEBER ID ESPECÍFICO', err))
-    }
-
-    function abrirAssentosFilme(id) {
-        const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${id}/seats`);
-        promise.then((res) => {
-            setArrayAssentos(res.data.seats)
-            setTela2(false)
-            setTela3(true)
-        });
-        promise.catch((err) => console.log('ERRO AO RECEBER ID ESPECÍFICO', err))
-    }
-
+    // console.log(infoFilme)
 
     function reiniciarTudo() {
         setNome('');
         setCpf('');
         setHoraFilme('');
+        setSemanaFilme('')
         setDiaFilme('');
-        setArrayAssentos([]);
-        setAssento([]);
-        setSessao();
+        setNomeFilme('')
         setCadeiras([])
     }
 
 
     return (
-        <BrowserRouter>
-            <ContainerLogo>
-                <h1>CINEFLIX</h1>
-            </ContainerLogo>
+        <>
+            <BrowserRouter>
+                <ContainerLogo>
+                    <h1>CINEFLIX</h1>
+                </ContainerLogo>
 
-            <Routes>
+                <Routes>
+                    <Route path="/" element={<TelaInicial
+                        setNomeFilme={setNomeFilme}
+                        setImagemFilme={setImagemFilme}
+                        setInfoFilme={setInfoFilme}
+                    />} />
 
-                <Route path="/" element={(
-                    tela1 && <TelaInicial
-                        abrirSessoesFilme={abrirSessoesFilme}
-                    />)} />
+                    <Route path="/sessoes/:idFilme" element={<TelaSessoes
+                        setHoraFilme={setHoraFilme}
+                        setDiaFilme={setDiaFilme}
+                        setSemanaFilme={setSemanaFilme}
+                        setAparecerHorario={setAparecerHorario}
+                    />} />
 
-                <Route path="/sessoes/:idFilme" element={(
-                    tela2 && <TelaSessoes
-                    setTela2={setTela2}
-                    setTela3={setTela3}
-                    setHoraFilme={setHoraFilme}
-                    sessao={sessao}
-                    setDiaFilme={setDiaFilme}
-                    abrirAssentosFilme={abrirAssentosFilme}
-                />
-                )} />
+                    <Route path="/assentos/:idSessao" element={<TelaAssentos
+                        nome={nome}
+                        cpf={cpf}
+                        setNome={setNome}
+                        setCpf={setCpf}
+                        setCadeiras={setCadeiras}
+                        cadeiras={cadeiras}
+                        setInfoFilme={setInfoFilme}
+                    />} />
 
-                <Route path="/assentos/:idSessao" element={(
-                    tela3 && <TelaAssentos
-                    setTela3={setTela3}
-                    setTela4={setTela4}
-                    nome={nome}
-                    setNome={setNome}
-                    cpf={cpf}
-                    setCpf={setCpf}
-                    assento={assento}
-                    setAssento={setAssento}
-                    arrayAssentos={arrayAssentos}
-                    setCadeiras={setCadeiras}
-                    cadeiras={cadeiras}
-                />
-                )} />
+                    <Route path="/sucesso" element={<TelaSucesso
+                        nome={nome}
+                        cpf={cpf}
+                        diaFilme={diaFilme}
+                        horaFilme={horaFilme}
+                        reiniciarTudo={reiniciarTudo}
+                        cadeiras={cadeiras}
+                        nomeFilme={nomeFilme}
+                        semanaFilme={semanaFilme}
+                    />} />
 
-            </Routes>
+                </Routes>
+                {infoFilme && (
+                    <Rodape
+                        nomeFilme={nomeFilme}
+                        semanaFilme={semanaFilme}
+                        horaFilme={horaFilme}
+                        imagemFilme={imagemFilme}
+                        aparecerHorario={aparecerHorario}
+                    />
+                )}
 
-
-            {tela4 &&
-                <TelaSucesso
-                    setTela4={setTela4}
-                    setTela1={setTela1}
-                    nome={nome}
-                    cpf={cpf}
-                    sessao={sessao}
-                    diaFilme={diaFilme}
-                    horaFilme={horaFilme}
-                    reiniciarTudo={reiniciarTudo}
-                    cadeiras={cadeiras}
-                />}
+                {/* <Rodape
+            nomeFilme={nomeFilme}
+            semanaFilme={semanaFilme}
+            horaFilme={horaFilme}
+            imagemFilme={imagemFilme}
+            /> */}
 
 
-            {!tela1 && !tela4 &&
-                <Rodape
-                    sessao={sessao}
-                    tela3={tela3}
-                    diaFilme={diaFilme}
-                    horaFilme={horaFilme}
-                />}
-        </BrowserRouter>
+            </BrowserRouter>
+        </>
     );
 }
 const ContainerLogo = styled.div`

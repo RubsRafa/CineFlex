@@ -1,16 +1,23 @@
+import { useState } from "react"
 import styled from "styled-components"
 
-export default function Rodape({sessao, tela3, diaFilme, horaFilme}) {
+export default function Rodape({ nomeFilme, semanaFilme, horaFilme, imagemFilme, aparecerHorario }) {
+    console.log(nomeFilme)
+    console.log(semanaFilme)
+    console.log(horaFilme)
+    console.log(imagemFilme)
+
+
     return (
-        <RodapeContainer data-test="footer">
+        <RodapeContainer data-test="footer" >
             <Filme>
-                <img src={sessao.posterURL} alt="" />
+                <img src={imagemFilme} alt="" />
             </Filme>
             <InfoFilme>
-                <h1>{sessao.title}</h1>
-                {tela3 && <h1>{diaFilme} - {horaFilme}</h1>}
+                <h1>{nomeFilme}</h1>
+                {aparecerHorario && (<h1>{semanaFilme} - {horaFilme}</h1>)}
             </InfoFilme>
-        </RodapeContainer>
+        </RodapeContainer >
     )
 }
 

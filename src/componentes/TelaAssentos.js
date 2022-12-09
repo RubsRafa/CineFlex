@@ -1,10 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { Link, useParams } from "react-router-dom";
 
-export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, setCpf, assento, setAssento, arrayAssentos, setCadeiras, cadeiras }) {
+export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, setCadeiras, setInfoFilme }) {
 
-    const [selecionar, setSelecionar] = useState('')
+    const [assentos, setAssentos] = useState(undefined)
+    const [assentoSelecionado, setAssentoSelecionado] = useState([]);
+    const [selecionar, setSelecionar] = useState()
+    const { idSessao } = useParams();
+
+    useEffect(() => {
+        axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`)
+            .then((res) => setAssentos(res.data.seats))
+            .catch((err) => console.log(err.response.data))
+    }, [])
+
+
+    if (assentos === undefined) {
+        return (
+            <TextoInicial>
+                <h1>Carregando assentos...</h1>
+            </TextoInicial>
+        )
+    }
+
+
+    function selecionarAssento(assentoEscolhido) {
+
+        if (!assentoSelecionado.includes(assentoEscolhido.id) && assentoEscolhido.isAvailable) {
+            setAssentoSelecionado([...assentoSelecionado, assentoEscolhido.id])
+            setCadeiras([...cadeiras, assentoEscolhido.name])
+            setSelecionar('#1AAE9E')
+        }
+        if (assentoSelecionado.includes(assentoEscolhido.id)) {
+            setAssentoSelecionado(assentoSelecionado.filter((a) => a !== assentoEscolhido.id))
+            setCadeiras(cadeiras.filter((c) => c !== assentoEscolhido.name))
+        }
+
+        if (assentoEscolhido.isAvailable === false) {
+            alert('Esse assento não está disponível');
+        }
+
+    }
+
+    function verificarInfo() {
+        if (nome.length !== '') {
+            if (cpf.length !== '') {
+                if (assentoSelecionado.length !== []) {
+                    reservarAssentos(assentoSelecionado)
+                    setInfoFilme(false)
+                }
+            }
+        }
+        
+    }
 
 
 
@@ -16,37 +66,16 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
             cpf: cpf
         };
 
-
-        const promise = axios.post(`https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`, objetoReservar);
-        promise.then((res) => {
-            console.log(res)
-            setTela3(false)
-            setTela4(true)
-        });
-        promise.catch((err) => console.log('ERRO AO ENVIAR ', err))
+        axios.post(`https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`, objetoReservar)
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => console.log('ERRO AO ENVIAR ', err))
     }
 
 
 
-    function selecionarAssento(assentoEscolhido) {
-        if (!assento.includes(assentoEscolhido.id)) {
-            setAssento([...assento, assentoEscolhido.id])
-            setCadeiras([...cadeiras, assentoEscolhido.name])
-        }
-        if (assento.includes(assentoEscolhido.id)) {
-            const novosAssentos = assento.filter((a) => a !== assentoEscolhido.id)
-            setAssento(novosAssentos)
-            setCadeiras(novosAssentos.name)
-        }
-    }
 
-    function verificarInfo() {
-        if (nome.length !== 0 && cpf.length !== 0 && arrayAssentos.length !== 0) {
-            setTela3(false)
-            setTela4(true)
-            reservarAssentos(assento)
-        }
-    }
 
     return (
         <>
@@ -54,11 +83,17 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
                 <h1>Selecione o(s) assento(s)</h1>
             </TextoInicial>
             <ListaAssentos>
-                {arrayAssentos.map((a) => <Assento data-test="seat" disponivel={a.isAvailable} cor={selecionar} escolher={assento.includes(a.id)} onClick={() => {
-                    setSelecionar('#1AAE9E')
-                    selecionarAssento(a)
-                }}>
-                    <h1>{a.name}</h1></Assento>)}
+                {assentos.map((a) =>
+                    <Assento
+                        key={a.id}
+                        data-test="seat"
+                        disponivel={a.isAvailable}
+                        cor={selecionar}
+                        escolher={assentoSelecionado.includes(a.id)}
+                        onClick={() => selecionarAssento(a)}
+                    >
+                        <h1>{a.name}</h1></Assento>
+                )}
             </ListaAssentos>
             <AssentoOpcoes>
                 <Opcao>
@@ -75,14 +110,21 @@ export default function TelaAssentos({ setTela3, setTela4, nome, setNome, cpf, s
                 </Opcao>
             </AssentoOpcoes>
             <InfoComprador>
-                <h1>Nome do comprador:</h1>
-                <input data-test="client-name" onChange={(e) => setNome(e.target.value)} value={nome} placeholder="Digite seu nome..."></input>
-                <h1>CPF do comprador:</h1>
-                <input data-test="client-cpf" onChange={(e) => setCpf(e.target.value)} value={cpf} placeholder="Digite seu CPF..."></input>
+                <form>
+                    <h1>Nome do comprador:</h1>
+                    <input data-test="client-name" type='text' required onChange={(e) => setNome(e.target.value)} value={nome} placeholder="Digite seu nome..."></input>
+                    <h1>CPF do comprador:</h1>
+                    <input data-test="client-cpf" type='text' required onChange={(e) => setCpf(e.target.value)} value={cpf} placeholder="Digite seu CPF..."></input>
+                </form>
             </InfoComprador>
 
             <Centralizar>
-            <Reservar data-test="book-seat-btn" onClick={verificarInfo}><h1>Reservar assento(s)</h1></Reservar>
+                <Link to={ '/sucesso'}>
+                    <Reservar onClick={() => {
+                        verificarInfo()
+
+                    }} data-test="book-seat-btn"><h1>Reservar assento(s)</h1></Reservar>
+                </Link>
             </Centralizar>
 
         </>
@@ -184,7 +226,7 @@ h1 {
     font-family: Roboto, sans-serif;
     color: #FFFFFF;
 } 
-`; 
+`;
 const Centralizar = styled.div`
 text-align: center;
-`; 
+`;
