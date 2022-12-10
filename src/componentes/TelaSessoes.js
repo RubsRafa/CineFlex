@@ -21,7 +21,7 @@ export default function TelaSessoes({ setHoraFilme, setDiaFilme, retornar, setSe
         return (
             <TextoInicial>
                 <Link to={'/'}>
-                <Voltar src={retornar} />
+                <Voltar data-test="go-home-header-btn" src={retornar} />
                 </Link>
                 <h1>Carregando sessões....</h1>
             </TextoInicial>
@@ -32,7 +32,7 @@ export default function TelaSessoes({ setHoraFilme, setDiaFilme, retornar, setSe
     return (
         <>
             <Link to={'/'}>
-                <Voltar src={retornar} alt='retornar' onClick={() => console.log('RETORNAR')} />
+                <Voltar data-test="go-home-header-btn" src={retornar} alt='retornar' />
             </Link>
             <TextoInicial>
                 <h1>Selecione o horário</h1>

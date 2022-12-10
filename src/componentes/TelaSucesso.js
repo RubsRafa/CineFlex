@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, reiniciarTudo, nomeFilme, retornar, assentosMovie }) {
@@ -6,7 +6,7 @@ export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, 
     return (
         <>
             <Link to={`/assentos/${assentosMovie}`}>
-                <Voltar src={retornar} alt='retornar' />
+                <Voltar data-test="go-home-header-btn" src={retornar} alt='retornar' />
             </Link>
 
             <TextoInicial>

@@ -10,7 +10,7 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
     const [assentos, setAssentos] = useState(undefined)
     const [assentoSelecionado, setAssentoSelecionado] = useState([]);
     const [selecionar, setSelecionar] = useState()
-    const { idFilme, idSessao } = useParams();
+    const { idSessao } = useParams();
 
     useEffect(() => {
         axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`)
@@ -25,7 +25,7 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
         return (
             <TextoInicial>
                 <Link to={`/sessoes/${sessionMovie}`}>
-                    <Voltar src={retornar} alt='retornar' />
+                    <Voltar data-test="go-home-header-btn" src={retornar} alt='retornar' />
                 </Link>
                 <h1>Carregando assentos...</h1>
             </TextoInicial>
@@ -80,7 +80,7 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
     return (
         <>
             <Link to={`/sessoes/${sessionMovie}`}>
-                <Voltar src={retornar} alt='retornar' />
+                <Voltar data-test="go-home-header-btn" src={retornar} alt='retornar' />
             </Link>
             <TextoInicial>
                 <h1>Selecione o(s) assento(s)</h1>
