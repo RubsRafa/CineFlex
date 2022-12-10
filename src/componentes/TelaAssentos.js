@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import Rodape from "./Rodape";
+import OpcoesAssento from './OpcoesAssento';
 
-export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, setCadeiras, setInfoFilme }) {
+export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, setCadeiras, setInfoFilme, retornar }) {
 
     const [assentos, setAssentos] = useState(undefined)
     const [assentoSelecionado, setAssentoSelecionado] = useState([]);
@@ -12,7 +14,8 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
 
     useEffect(() => {
         axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`)
-            .then((res) => setAssentos(res.data.seats))
+            .then((res) => {setAssentos(res.data)
+            console.log(res.data)})
             .catch((err) => console.log(err.response.data))
     }, [])
 
@@ -20,6 +23,7 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
     if (assentos === undefined) {
         return (
             <TextoInicial>
+                <Voltar src={retornar} />
                 <h1>Carregando assentos...</h1>
             </TextoInicial>
         )
@@ -79,11 +83,12 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
 
     return (
         <>
+        <Voltar src={retornar} alt='retornar' onClick={() => console.log('RETORNAR')} />
             <TextoInicial>
                 <h1>Selecione o(s) assento(s)</h1>
             </TextoInicial>
             <ListaAssentos>
-                {assentos.map((a) =>
+                {assentos.seats.map((a) =>
                     <Assento
                         key={a.id}
                         data-test="seat"
@@ -95,20 +100,7 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
                         <h1>{a.name}</h1></Assento>
                 )}
             </ListaAssentos>
-            <AssentoOpcoes>
-                <Opcao>
-                    <Exemplo cor={'#1AAE9E'} corFundo={'#0E7D71'}></Exemplo>
-                    <p>Selecionado</p>
-                </Opcao>
-                <Opcao>
-                    <Exemplo cor={'#C3CFD9'} corFundo={'#7B8B99'}></Exemplo>
-                    <p>Disponível</p>
-                </Opcao>
-                <Opcao>
-                    <Exemplo cor={'#FBE192'} corFundo={'#F7C52B'}></Exemplo>
-                    <p>Indisponível</p>
-                </Opcao>
-            </AssentoOpcoes>
+            <OpcoesAssento />
             <InfoComprador>
                 <form>
                     <h1>Nome do comprador:</h1>
@@ -126,6 +118,13 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
                     }} data-test="book-seat-btn"><h1>Reservar assento(s)</h1></Reservar>
                 </Link>
             </Centralizar>
+
+            <Rodape 
+            nomeFilme={assentos.movie.title}
+            imagemFilme={assentos.movie.posterURL}
+            semanaFilme={`${assentos.day.weekday} -`}
+            horaFilme={assentos.name}
+            />
 
         </>
     )
@@ -163,30 +162,6 @@ h1 {
     color: #000000; 
     font-size: 11px;
     font-family: Roboto, sans-serif;
-}
-`;
-const AssentoOpcoes = styled.div`
-width: 70%;
-margin: 0 auto;
-display: flex;
-flex-wrap: wrap;
-justify-content: space-evenly;
-`;
-const Exemplo = styled.div`
-margin: 0 10px 15px 20px; 
-width: 26px;
-height: 26px;
-box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
-border-radius: 50%;
-border: 1px solid ${props => props.corFundo};
-background-color: ${props => props.cor};
-`;
-const Opcao = styled.div`
-display: block;
-p{
-    font-family: Roboto, sans-serif;
-    font-size: 13px;
-    color: #4E5A65;
 }
 `;
 const InfoComprador = styled.div`
@@ -229,4 +204,11 @@ h1 {
 `;
 const Centralizar = styled.div`
 text-align: center;
+`;
+const Voltar = styled.img`
+width: 30px;
+height: 30px;
+position: absolute;
+top: 20px;
+left:10px;
 `;

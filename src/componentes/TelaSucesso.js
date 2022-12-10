@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, reiniciarTudo, nomeFilme }) {
+export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, reiniciarTudo, nomeFilme, retornar }) {
 
     return (
         <>
+        <Voltar src={retornar} alt='retornar' onClick={() => console.log('RETORNAR')} />
             <TextoInicial>
                 <h1>Pedido feito
                     com sucesso!</h1>
@@ -84,3 +85,10 @@ h1 {
 const Centralizar = styled.div`
 text-align: center;
 `; 
+const Voltar = styled.img`
+width: 30px;
+height: 30px;
+position: absolute;
+top: 20px;
+left:10px;
+`;

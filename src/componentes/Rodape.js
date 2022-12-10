@@ -1,12 +1,6 @@
-import { useState } from "react"
 import styled from "styled-components"
 
-export default function Rodape({ nomeFilme, semanaFilme, horaFilme, imagemFilme, aparecerHorario }) {
-    console.log(nomeFilme)
-    console.log(semanaFilme)
-    console.log(horaFilme)
-    console.log(imagemFilme)
-
+export default function Rodape({ nomeFilme, semanaFilme, horaFilme, imagemFilme }) {
 
     return (
         <RodapeContainer data-test="footer" >
@@ -15,7 +9,7 @@ export default function Rodape({ nomeFilme, semanaFilme, horaFilme, imagemFilme,
             </Filme>
             <InfoFilme>
                 <h1>{nomeFilme}</h1>
-                {aparecerHorario && (<h1>{semanaFilme} - {horaFilme}</h1>)}
+                <h1>{semanaFilme} {horaFilme}</h1>
             </InfoFilme>
         </RodapeContainer >
     )
