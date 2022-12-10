@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-export default function TelaInicial({setNomeFilme, setImagemFilme}) {
+export default function TelaInicial({setNomeFilme}) {
 
   const [listaFilmes, setListaFilmes] = useState(undefined);
 
@@ -31,7 +31,6 @@ export default function TelaInicial({setNomeFilme, setImagemFilme}) {
           <Link key={f.id} to={`/sessoes/${f.id}`}>
             <Filmes onClick={() => {
               setNomeFilme(f.title)
-              setImagemFilme(f.posterURL)
               }}>
               <img data-test="movie" src={f.posterURL} alt="" />
             </Filmes>

@@ -1,21 +1,21 @@
 import styled from "styled-components";
 
-export default function OpcoesAssento () {
+export default function OpcoesAssento() {
+
+    const opcoes = [
+        { cor: '#1AAE9E', corFundo: '#0E7D71', texto: 'Selecionado' },
+        { cor: '#C3CFD9', corFundo: '#7B8B99', texto: 'Disponível' },
+        { cor: '#FBE192', corFundo: '#F7C52B', texto: 'Indisponível' }]
+
     return (
         <AssentoOpcoes>
-                <Opcao>
-                    <Exemplo cor={'#1AAE9E'} corFundo={'#0E7D71'}></Exemplo>
-                    <p>Selecionado</p>
+            {opcoes.map((o) =>
+                <Opcao key={o.texto}>
+                    <Exemplo cor={o.cor} corFundo={o.corFundo}></Exemplo>
+                    <p>{o.texto}</p>
                 </Opcao>
-                <Opcao>
-                    <Exemplo cor={'#C3CFD9'} corFundo={'#7B8B99'}></Exemplo>
-                    <p>Disponível</p>
-                </Opcao>
-                <Opcao>
-                    <Exemplo cor={'#FBE192'} corFundo={'#F7C52B'}></Exemplo>
-                    <p>Indisponível</p>
-                </Opcao>
-            </AssentoOpcoes>
+            )}
+        </AssentoOpcoes>
     )
 }
 const AssentoOpcoes = styled.div`

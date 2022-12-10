@@ -1,11 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 
-export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, reiniciarTudo, nomeFilme, retornar }) {
+export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, reiniciarTudo, nomeFilme, retornar, assentosMovie }) {
 
     return (
         <>
-        <Voltar src={retornar} alt='retornar' onClick={() => console.log('RETORNAR')} />
+            <Link to={`/assentos/${assentosMovie}`}>
+                <Voltar src={retornar} alt='retornar' />
+            </Link>
+
             <TextoInicial>
                 <h1>Pedido feito
                     com sucesso!</h1>
@@ -84,7 +87,7 @@ h1 {
 `;
 const Centralizar = styled.div`
 text-align: center;
-`; 
+`;
 const Voltar = styled.img`
 width: 30px;
 height: 30px;

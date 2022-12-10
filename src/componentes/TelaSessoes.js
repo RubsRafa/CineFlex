@@ -4,14 +4,15 @@ import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Rodape from "./Rodape";
 
-export default function TelaSessoes({ setHoraFilme, setDiaFilme, setSemanaFilme, retornar }) {
+export default function TelaSessoes({ setHoraFilme, setDiaFilme, retornar, setSessionMovie }) {
     const [sessoes, setSessoes] = useState(undefined);
     const { idFilme } = useParams();
 
 
     useEffect(() => {
         axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`)
-            .then((res) => setSessoes(res.data))
+            .then((res) => {setSessoes(res.data)
+                setSessionMovie(idFilme)})
             .catch((err) => console.log(err.response.data))
     }, [])
 
@@ -19,7 +20,9 @@ export default function TelaSessoes({ setHoraFilme, setDiaFilme, setSemanaFilme,
     if (sessoes === undefined) {
         return (
             <TextoInicial>
+                <Link to={'/'}>
                 <Voltar src={retornar} />
+                </Link>
                 <h1>Carregando sessões....</h1>
             </TextoInicial>
         )
@@ -28,7 +31,9 @@ export default function TelaSessoes({ setHoraFilme, setDiaFilme, setSemanaFilme,
 
     return (
         <>
-        <Voltar src={retornar} alt='retornar' onClick={() => console.log('RETORNAR')} />
+            <Link to={'/'}>
+                <Voltar src={retornar} alt='retornar' onClick={() => console.log('RETORNAR')} />
+            </Link>
             <TextoInicial>
                 <h1>Selecione o horário</h1>
             </TextoInicial>
@@ -44,7 +49,6 @@ export default function TelaSessoes({ setHoraFilme, setDiaFilme, setSemanaFilme,
                                     <Hora onClick={() => {
                                         setHoraFilme(s.showtimes[0].name)
                                         setDiaFilme(s.date)
-                                        setSemanaFilme(`${s.weekday} -`)
                                     }} >
                                         <h1 data-test="showtime">{s.showtimes[0].name}</h1>
                                     </Hora>
@@ -54,7 +58,6 @@ export default function TelaSessoes({ setHoraFilme, setDiaFilme, setSemanaFilme,
                                     <Hora onClick={() => {
                                         setHoraFilme(s.showtimes[1].name)
                                         setDiaFilme(s.date)
-                                        setSemanaFilme(`${s.weekday} -`)
                                     }} >
                                         <h1 data-test="showtime">{s.showtimes[1].name}</h1>
                                     </Hora>
@@ -64,9 +67,9 @@ export default function TelaSessoes({ setHoraFilme, setDiaFilme, setSemanaFilme,
                         </div>
                     )}
 
-                    <Rodape 
-                    nomeFilme={sessoes.title} 
-                    imagemFilme={sessoes.posterURL} 
+                    <Rodape
+                        nomeFilme={sessoes.title}
+                        imagemFilme={sessoes.posterURL}
                     />
 
                 </DataEHorario>

@@ -12,21 +12,19 @@ export default function TelaPrincipal() {
     const [nome, setNome] = useState('');
     const [cpf, setCpf] = useState('');
     const [horaFilme, setHoraFilme] = useState('');
-    const [semanaFilme, setSemanaFilme] = useState('');
     const [diaFilme, setDiaFilme] = useState('');
     const [nomeFilme, setNomeFilme] = useState('');
-    const [imagemFilme, setImagemFilme] = useState('');
     const [cadeiras, setCadeiras] = useState([]);
+    const [sessionMovie, setSessionMovie] = useState();
+    const [assentosMovie, setAssentosMovie] = useState(); 
 
 
     function reiniciarTudo() {
         setNome('');
         setCpf('');
         setHoraFilme('');
-        setSemanaFilme('')
         setDiaFilme('');
         setNomeFilme('')
-        setImagemFilme('')
         setCadeiras([])
     }
 
@@ -41,14 +39,13 @@ export default function TelaPrincipal() {
                 <Routes>
                     <Route path="/" element={<TelaInicial
                         setNomeFilme={setNomeFilme}
-                        setImagemFilme={setImagemFilme}
                     />} />
 
                     <Route path="/sessoes/:idFilme" element={<TelaSessoes
                         setHoraFilme={setHoraFilme}
                         setDiaFilme={setDiaFilme}
-                        setSemanaFilme={setSemanaFilme}
                         retornar={retornar}
+                        setSessionMovie={setSessionMovie}
                     />} />
 
                     <Route path="/assentos/:idSessao" element={<TelaAssentos
@@ -59,6 +56,8 @@ export default function TelaPrincipal() {
                         setCadeiras={setCadeiras}
                         cadeiras={cadeiras}
                         retornar={retornar}
+                        setAssentosMovie={setAssentosMovie}
+                        sessionMovie={sessionMovie}
                     />} />
 
                     <Route path="/sucesso" element={<TelaSucesso
@@ -70,6 +69,7 @@ export default function TelaPrincipal() {
                         cadeiras={cadeiras}
                         nomeFilme={nomeFilme}
                         retornar={retornar}
+                        assentosMovie={assentosMovie}
                     />} />
 
                 </Routes>

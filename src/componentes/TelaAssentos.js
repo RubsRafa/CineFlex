@@ -5,17 +5,18 @@ import { Link, useParams } from "react-router-dom";
 import Rodape from "./Rodape";
 import OpcoesAssento from './OpcoesAssento';
 
-export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, setCadeiras, setInfoFilme, retornar }) {
+export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, setCadeiras, retornar, setAssentosMovie, sessionMovie }) {
 
     const [assentos, setAssentos] = useState(undefined)
     const [assentoSelecionado, setAssentoSelecionado] = useState([]);
     const [selecionar, setSelecionar] = useState()
-    const { idSessao } = useParams();
+    const { idFilme, idSessao } = useParams();
 
     useEffect(() => {
         axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`)
             .then((res) => {setAssentos(res.data)
-            console.log(res.data)})
+                setAssentosMovie(idSessao)
+            })
             .catch((err) => console.log(err.response.data))
     }, [])
 
@@ -23,7 +24,9 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
     if (assentos === undefined) {
         return (
             <TextoInicial>
-                <Voltar src={retornar} />
+                <Link to={`/sessoes/${sessionMovie}`}>
+                    <Voltar src={retornar} alt='retornar' />
+                </Link>
                 <h1>Carregando assentos...</h1>
             </TextoInicial>
         )
@@ -53,14 +56,11 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
             if (cpf.length !== '') {
                 if (assentoSelecionado.length !== []) {
                     reservarAssentos(assentoSelecionado)
-                    setInfoFilme(false)
                 }
             }
         }
-        
+
     }
-
-
 
     function reservarAssentos(assentosEscolhidos) {
 
@@ -77,13 +77,11 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
             .catch((err) => console.log('ERRO AO ENVIAR ', err))
     }
 
-
-
-
-
     return (
         <>
-        <Voltar src={retornar} alt='retornar' onClick={() => console.log('RETORNAR')} />
+            <Link to={`/sessoes/${sessionMovie}`}>
+                <Voltar src={retornar} alt='retornar' />
+            </Link>
             <TextoInicial>
                 <h1>Selecione o(s) assento(s)</h1>
             </TextoInicial>
@@ -111,7 +109,7 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
             </InfoComprador>
 
             <Centralizar>
-                <Link to={ '/sucesso'}>
+                <Link to={'/sucesso'}>
                     <Reservar onClick={() => {
                         verificarInfo()
 
@@ -119,11 +117,11 @@ export default function TelaAssentos({ nome, setNome, cpf, setCpf, cadeiras, set
                 </Link>
             </Centralizar>
 
-            <Rodape 
-            nomeFilme={assentos.movie.title}
-            imagemFilme={assentos.movie.posterURL}
-            semanaFilme={`${assentos.day.weekday} -`}
-            horaFilme={assentos.name}
+            <Rodape
+                nomeFilme={assentos.movie.title}
+                imagemFilme={assentos.movie.posterURL}
+                semanaFilme={`${assentos.day.weekday} -`}
+                horaFilme={assentos.name}
             />
 
         </>
