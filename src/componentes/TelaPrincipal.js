@@ -18,7 +18,6 @@ export default function TelaPrincipal() {
     const [sessionMovie, setSessionMovie] = useState();
     const [assentosMovie, setAssentosMovie] = useState(); 
 
-
     function reiniciarTudo() {
         setNome('');
         setCpf('');
@@ -26,6 +25,8 @@ export default function TelaPrincipal() {
         setDiaFilme('');
         setNomeFilme('')
         setCadeiras([])
+        setSessionMovie('')
+        setAssentosMovie('')
     }
 
 

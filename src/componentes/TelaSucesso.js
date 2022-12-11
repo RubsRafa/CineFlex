@@ -22,7 +22,7 @@ export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, 
 
             <CaixaInfo data-test="seats-info">
                 <h1>Ingressos</h1>
-                {cadeiras.map((a) => <p>Assento {a}</p>)}
+                {cadeiras.map((a) => <p key={a}>Assento {a}</p>)}
             </CaixaInfo>
 
             <CaixaInfo data-test="client-info">
