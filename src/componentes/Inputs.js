@@ -6,9 +6,6 @@ export default function Inputs({ nome, setNome, cpf, setCpf, assentoSelecionado 
 
     const navigate = useNavigate(); 
 
-    console.log(assentoSelecionado)
-
-
     function reservarAssentos(e) {
         e.preventDefault(); 
 
@@ -27,7 +24,7 @@ export default function Inputs({ nome, setNome, cpf, setCpf, assentoSelecionado 
     }
 
     return (
-        <form onSubmit={assentoSelecionado.length !== 0 && reservarAssentos}>
+        <form onSubmit={assentoSelecionado.length !== 0 ? reservarAssentos : undefined}>
             <InfoComprador>
 
                 <label htmlFor="name">Nome do comprador:</label>
