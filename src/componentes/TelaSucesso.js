@@ -6,7 +6,7 @@ export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, 
     return (
         <>
             <Link to={`/assentos/${assentosMovie}`}>
-                <Voltar data-test="go-home-header-btn" src={retornar} alt='retornar' />
+                <Voltar onClick={reiniciarTudo} data-test="go-home-header-btn" src={retornar} alt='retornar' />
             </Link>
 
             <TextoInicial>
@@ -33,9 +33,7 @@ export default function TelaSucesso({ nome, cpf, horaFilme, diaFilme, cadeiras, 
 
             <Centralizar>
                 <Link to={'/'}>
-                    <Finalizar data-test="go-home-btn" onClick={() => {
-                        reiniciarTudo()
-                    }}><h1>Voltar pra Home</h1></Finalizar>
+                    <Finalizar data-test="go-home-btn" onClick={reiniciarTudo}><h1>Voltar pra Home</h1></Finalizar>
                 </Link>
             </Centralizar>
 

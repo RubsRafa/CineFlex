@@ -21,9 +21,6 @@ export default function TelaPrincipal() {
     function reiniciarTudo() {
         setNome('');
         setCpf('');
-        setHoraFilme('');
-        setDiaFilme('');
-        setNomeFilme('')
         setCadeiras([])
         setSessionMovie('')
         setAssentosMovie('')
